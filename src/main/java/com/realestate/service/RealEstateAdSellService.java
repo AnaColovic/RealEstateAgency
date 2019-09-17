@@ -6,6 +6,7 @@
 package com.realestate.service;
 
 import com.realestate.domain.RealEstateAdSell;
+import com.realestate.dto.RealEstateAdSellDTO;
 import java.util.List;
 
 /**
@@ -14,12 +15,12 @@ import java.util.List;
  */
 public interface RealEstateAdSellService {
 
-    void saveOrUpdate(RealEstateAdSell realestatead);
+    void saveOrUpdate(RealEstateAdSellDTO realestatead);
 
-    List<RealEstateAdSell> getAll();
+    List<RealEstateAdSellDTO> getAll();
 
-    RealEstateAdSell getById(int id);
+    RealEstateAdSellDTO getById(int id);
 
-    List<RealEstateAdSell> findByCityRoomsType(int idcity, double rooms, String type, double minPrice, double maxPrice, double minArea, double maxArea);
+    List<RealEstateAdSellDTO> findByCityRoomsType(int idcity, double rooms, String type, double minPrice, double maxPrice, double minArea, double maxArea);
 
 }

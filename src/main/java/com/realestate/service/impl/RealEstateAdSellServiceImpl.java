@@ -7,11 +7,13 @@ package com.realestate.service.impl;
 
 import com.realestate.domain.RealEstateAdSell;
 import com.realestate.domain.TypeRealEstate;
+import com.realestate.dto.RealEstateAdSellDTO;
 import com.realestate.repository.RealEstateAdSellRepository;
 import com.realestate.service.RealEstateAdSellService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -19,6 +21,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,32 +35,37 @@ public class RealEstateAdSellServiceImpl implements RealEstateAdSellService {
 
     @Autowired
     private EntityManager em;
+    
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private RealEstateAdSellRepository repository;
 
     @Override
-    public void saveOrUpdate(RealEstateAdSell realestatead) {
-        repository.save(realestatead);
+    public void saveOrUpdate(RealEstateAdSellDTO realestatead) {
+        RealEstateAdSell r = modelMapper.map(realestatead, RealEstateAdSell.class);
+        repository.save(r);
     }
 
     @Override
-    public List<RealEstateAdSell> getAll() {
-        return repository.findAll();
+    public List<RealEstateAdSellDTO> getAll() {
+        List<RealEstateAdSell> sellList =  repository.findAll();
+        return sellList.stream().map(sell -> modelMapper.map(sell, RealEstateAdSellDTO.class)).collect(Collectors.toList());
 
     }
 
     @Override
-    public RealEstateAdSell getById(int id) {
+    public RealEstateAdSellDTO getById(int id) {
         Optional<RealEstateAdSell> realEstateAd = repository.findById(id);
         if (realEstateAd.isPresent()) {
-            return realEstateAd.get();
+            return modelMapper.map(realEstateAd.get(), RealEstateAdSellDTO.class);
         }
         throw new EntityNotFoundException("Ad Sell with id = " + id + " does not exist");
     }
 
     @Override
-    public List<RealEstateAdSell> findByCityRoomsType(int idcity, double rooms, String type, double minPrice, double maxPrice, double minArea, double maxArea) {
+    public List<RealEstateAdSellDTO> findByCityRoomsType(int idcity, double rooms, String type, double minPrice, double maxPrice, double minArea, double maxArea) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();
         Root<RealEstateAdSell> rent = cq.from(RealEstateAdSell.class);
@@ -90,7 +98,9 @@ public class RealEstateAdSellServiceImpl implements RealEstateAdSellService {
         }
 
         cq.select(rent).where(predicate.toArray(new Predicate[]{}));
-        return em.createQuery(cq).getResultList();
+        List<RealEstateAdSell> sellList =  em.createQuery(cq).getResultList();
+        return sellList.stream().map(sell -> modelMapper.map(sell, RealEstateAdSellDTO.class)).collect(Collectors.toList());
+
     }
 
 }

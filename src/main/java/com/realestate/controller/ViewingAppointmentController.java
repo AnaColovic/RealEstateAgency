@@ -7,6 +7,7 @@ package com.realestate.controller;
 
 import com.realestate.domain.RealEstateAd;
 import com.realestate.domain.ViewingAppointment;
+import com.realestate.dto.RealEstateAdDTO;
 import com.realestate.dto.ViewingAppointmentDTO;
 import com.realestate.service.ViewingAppointmentService;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -36,44 +37,30 @@ public class ViewingAppointmentController {
     @Autowired
     private ViewingAppointmentService viewingService;
 
-    @Autowired
-    private ModelMapper modelMapper;
     
      @RequestMapping(value = {"save/{id}"}, method = RequestMethod.POST)
-    public ViewingAppointmentDTO save(@RequestBody @Valid ViewingAppointmentDTO viewingAppointmentDTO, @PathVariable int id) throws SQLIntegrityConstraintViolationException{
-        ViewingAppointment viewingAppointment = modelMapper.map(viewingAppointmentDTO, ViewingAppointment.class);
-        viewingAppointment.setRealEstateAd(new RealEstateAd(id));
-        viewingAppointment = viewingService.saveOrUpdate(viewingAppointment);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        format.format(viewingAppointment.getDate());
-               
-        return modelMapper.map(viewingAppointment, ViewingAppointmentDTO.class);
+    public ViewingAppointmentDTO saveViewingAppointment(@RequestBody @Valid ViewingAppointmentDTO viewingAppointmentDTO, @PathVariable int id) throws SQLIntegrityConstraintViolationException{
+        viewingAppointmentDTO.setRealEstateAd(new RealEstateAdDTO(id));
+        return viewingService.saveOrUpdate(viewingAppointmentDTO);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) {
+    public void deleteViewingAppointment(@PathVariable int id) {
         viewingService.delete(id);
     }
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-    public void update(@RequestBody @Valid ViewingAppointmentDTO viewingAppointmentDTO, @PathVariable int id) throws SQLIntegrityConstraintViolationException{
-        ViewingAppointment viewingAppointment = modelMapper.map(viewingAppointmentDTO, ViewingAppointment.class);
-        viewingService.saveOrUpdate(viewingAppointment);
+    public void updateViewingAppointment(@RequestBody @Valid ViewingAppointmentDTO viewingAppointmentDTO, @PathVariable int id) throws SQLIntegrityConstraintViolationException{
+        viewingService.saveOrUpdate(viewingAppointmentDTO);
     }
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
-    public List<ViewingAppointmentDTO> getAll() {
-        List<ViewingAppointment> list = viewingService.getAll();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        for(ViewingAppointment view: list){
-            format.format(view.getDate());
-        }
-        return list.stream().map(appointment -> modelMapper.map(appointment, ViewingAppointmentDTO.class)).collect(Collectors.toList());
+    public List<ViewingAppointmentDTO> getAllViewingAppointments() {
+        return viewingService.getAll();
     }
 
     @RequestMapping(value = "get/{id}]", method = RequestMethod.GET)
-    public ViewingAppointmentDTO getById(@PathVariable int id) throws EntityNotFoundException{
-        ViewingAppointment viewingAppointment = viewingService.findById(id);
-        return modelMapper.map(viewingAppointment, ViewingAppointmentDTO.class);
+    public ViewingAppointmentDTO getViewingAppointmentById(@PathVariable int id) throws EntityNotFoundException{
+        return viewingService.findById(id);
     }
 }

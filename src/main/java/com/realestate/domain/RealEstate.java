@@ -146,8 +146,6 @@ public class RealEstate {
         this.fileName = fileName;
     }
     
-    
-
     @Override
     public int hashCode() {
         int hash = 5;
@@ -172,10 +170,6 @@ public class RealEstate {
         }
         return true;
     }
-
-    
-    
-    
 
     @Override
     public String toString() {

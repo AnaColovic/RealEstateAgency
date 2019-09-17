@@ -6,6 +6,7 @@
 package com.realestate.service;
 
 import com.realestate.domain.*;
+import com.realestate.dto.ViewingAppointmentDTO;
 import java.util.List;
 
 /**
@@ -14,11 +15,11 @@ import java.util.List;
  */
 
 public interface ViewingAppointmentService {
-    List<ViewingAppointment> getAll();
+    List<ViewingAppointmentDTO> getAll();
 
-    ViewingAppointment findById(int id);
+    ViewingAppointmentDTO findById(int id);
 
-    ViewingAppointment saveOrUpdate(ViewingAppointment viewingAppointment);
+    ViewingAppointmentDTO saveOrUpdate(ViewingAppointmentDTO viewingAppointment);
         
     void delete(int id);
 }

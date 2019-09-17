@@ -6,6 +6,7 @@
 package com.realestate.service;
 
 import com.realestate.domain.RealEstate;
+import com.realestate.dto.RealEstateDTO;
 import java.util.List;
 
 
@@ -14,13 +15,11 @@ import java.util.List;
  * @author Administrator
  */
 public interface RealEstateService {
-    List<RealEstate> getAll();
+    List<RealEstateDTO> getAll();
 
-    RealEstate findById(int id);
+    RealEstateDTO findById(int id);
 
-    RealEstate saveOrUpdate(RealEstate realestate);
-    
-    List<RealEstate> findByExample(RealEstate realEstate);
-    
+    RealEstateDTO saveOrUpdate(RealEstateDTO realestate);
+        
     void delete(int id);
 }
