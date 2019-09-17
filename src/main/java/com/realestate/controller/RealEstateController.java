@@ -49,13 +49,10 @@ public class RealEstateController {
     @Autowired
     private ServletContext context;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public RealEstateDTO saveWithImage(@RequestParam("realEstate") String realEstate, @RequestParam("realEstateImg") MultipartFile realEstateImg) throws MaxUploadSizeExceededException{
+    public RealEstateDTO saveRealEstate(@RequestParam("realEstate") String realEstate, @RequestParam("realEstateImg") MultipartFile realEstateImg) throws MaxUploadSizeExceededException{
         Gson gson = new Gson();
-        @Valid RealEstate r = gson.fromJson(realEstate, RealEstate.class);
+        @Valid RealEstateDTO r = gson.fromJson(realEstate, RealEstateDTO.class);
 
         boolean isExist = new File(context.getRealPath("/realEstate/")).exists();
         if (!isExist) {
@@ -74,17 +71,14 @@ public class RealEstateController {
 
         r.setFileName(modifiedFileName);
 
-        r = realEstateService.saveOrUpdate(r);
-        return modelMapper.map(r, RealEstateDTO.class);
+        return realEstateService.saveOrUpdate(r);
     }
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
-    public List<RealEstateDTO> getAllWithImage() {
-        List<RealEstate> realEstates = realEstateService.getAll();
-        List<RealEstateDTO> realEstatesDTO = realEstates.stream().map(realEstate -> modelMapper.map(realEstate, RealEstateDTO.class)).collect(Collectors.toList());
-                
+    public List<RealEstateDTO> getAllRealEstates() {
+        List<RealEstateDTO> realEstates = realEstateService.getAll();
 
-        for (RealEstateDTO r : realEstatesDTO) {
+        for (RealEstateDTO r : realEstates) {
             String filePath = context.getRealPath("/realEstate");
             File fileFolder = new File(filePath);
             if (fileFolder != null) {
@@ -110,19 +104,18 @@ public class RealEstateController {
             }
         }
 
-        return realEstatesDTO;
+        return realEstates;
     }
 
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public RealEstateDTO getById(@PathVariable int id) throws EntityNotFoundException{
-        RealEstate realEstate = realEstateService.findById(id);
-        return modelMapper.map(realEstate, RealEstateDTO.class);
+    public RealEstateDTO getRealEstateById(@PathVariable int id) throws EntityNotFoundException{
+        return realEstateService.findById(id);
     }
 
     @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public RealEstateDTO update(@RequestParam("realEstate") String realEstate, @RequestParam("realEstateImg") MultipartFile realEstateImg) throws MaxUploadSizeExceededException{
+    public RealEstateDTO updateRealEstate(@RequestParam("realEstate") String realEstate, @RequestParam("realEstateImg") MultipartFile realEstateImg) throws MaxUploadSizeExceededException{
         Gson gson = new Gson();
-        @Valid RealEstate r = gson.fromJson(realEstate, RealEstate.class);
+        @Valid RealEstateDTO r = gson.fromJson(realEstate, RealEstateDTO.class);
 
         boolean isExist = new File(context.getRealPath("/realEstate/")).exists();
         if (!isExist) {
@@ -143,12 +136,11 @@ public class RealEstateController {
             r.setFileName(modifiedFileName);
         }
 
-        r = realEstateService.saveOrUpdate(r);
-        return modelMapper.map(r, RealEstateDTO.class);
+        return realEstateService.saveOrUpdate(r);
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) {
+    public void deleteRealEstate(@PathVariable int id) {
         realEstateService.delete(id);
     }
 }

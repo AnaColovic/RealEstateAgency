@@ -6,6 +6,7 @@
 package com.realestate.service;
 
 import com.realestate.domain.UserProfile;
+import com.realestate.dto.UserProfileDTO;
 
 /**
  *
@@ -13,7 +14,8 @@ import com.realestate.domain.UserProfile;
  */
 public interface UserProfileService {
     
-    UserProfile signUp(UserProfile userProfile);
-    UserProfile findByUsername(String username);
+    UserProfileDTO signUp(UserProfileDTO userProfile);
+    UserProfileDTO findByUsername(String username);
+    UserProfileDTO confirmedAccount(String confirmationToken);
     
 }

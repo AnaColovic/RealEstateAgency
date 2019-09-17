@@ -46,23 +46,18 @@ public class RealEstateAdSellController {
 
     @Autowired
     private RealEstateAdService realEstateAdService;
-
-    @Autowired
-    private ModelMapper modelMapper;
     
     @Autowired
     private ServletContext context;
 
     @RequestMapping(value = "save", method = RequestMethod.POST)
-    public void save(@RequestBody @Valid RealEstateAdSellDTO realEstateAd) {
-        RealEstateAdSell sell = modelMapper.map(realEstateAd, RealEstateAdSell.class);
-        realEstateAdSellService.saveOrUpdate(sell);
+    public void saveSellAd(@RequestBody @Valid RealEstateAdSellDTO realEstateAd) {
+        realEstateAdSellService.saveOrUpdate(realEstateAd);
     }
 
     @RequestMapping(value = "get", method = RequestMethod.GET)
     public List<RealEstateAdSellDTO> getAllSell() {
-        List<RealEstateAdSell> sellList = realEstateAdSellService.getAll();
-        List<RealEstateAdSellDTO> sellListDTO = sellList.stream().map(sell -> modelMapper.map(sell, RealEstateAdSellDTO.class)).collect(Collectors.toList());
+        List<RealEstateAdSellDTO> sellListDTO = realEstateAdSellService.getAll();
         
         for(RealEstateAdSellDTO sell : sellListDTO){
             String filePath = context.getRealPath("/realEstate");
@@ -96,8 +91,7 @@ public class RealEstateAdSellController {
 
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public RealEstateAdSellDTO getSellAdById(@PathVariable int id) throws EntityNotFoundException{
-        RealEstateAdSell sell = realEstateAdSellService.getById(id);
-        RealEstateAdSellDTO sellDTO  = modelMapper.map(sell, RealEstateAdSellDTO.class);
+        RealEstateAdSellDTO sellDTO = realEstateAdSellService.getById(id);
         
           String filePath = context.getRealPath("/realEstate");
             File fileFolder = new File(filePath);
@@ -128,20 +122,19 @@ public class RealEstateAdSellController {
     }
 
     @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) {
+    public void deleteSellAd(@PathVariable int id) {
         realEstateAdService.delete(id);
     }
 
     @RequestMapping(value = "search", method = RequestMethod.GET)
-    public List<RealEstateAdSellDTO> findByCityRoomsType(@RequestParam(value = "idcity", required = false, defaultValue = "0") int idcity,
+    public List<RealEstateAdSellDTO> findSellAd(@RequestParam(value = "idcity", required = false, defaultValue = "0") int idcity,
             @RequestParam(value = "rooms", required = false, defaultValue = "0") double rooms, 
             @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "minPrice", required = false, defaultValue = "0") double minPrice,
             @RequestParam(value = "maxPrice", required = false, defaultValue = "0") double maxPrice,
             @RequestParam(value = "minArea", required = false, defaultValue = "0") double minArea,
             @RequestParam(value = "maxArea", required = false, defaultValue = "0") double maxArea) {
-        List<RealEstateAdSell> sellList = realEstateAdSellService.findByCityRoomsType(idcity, rooms, type, minPrice, maxPrice, minArea, maxArea);
-        List<RealEstateAdSellDTO> sellListDTO =  sellList.stream().map(sell -> modelMapper.map(sell, RealEstateAdSellDTO.class)).collect(Collectors.toList());
+        List<RealEstateAdSellDTO> sellListDTO = realEstateAdSellService.findByCityRoomsType(idcity, rooms, type, minPrice, maxPrice, minArea, maxArea);
         
         
          for(RealEstateAdSellDTO sell : sellListDTO){
@@ -175,9 +168,8 @@ public class RealEstateAdSellController {
     }
 
     @RequestMapping(value = "update/{id}", method = RequestMethod.PUT)
-    public void update(@RequestBody @Valid RealEstateAdSellDTO realEstateAd, @PathVariable int id) {
-        RealEstateAdSell sell = modelMapper.map(realEstateAd, RealEstateAdSell.class);
-        realEstateAdSellService.saveOrUpdate(sell);
+    public void updateSellAd(@RequestBody @Valid RealEstateAdSellDTO realEstateAd, @PathVariable int id) {
+        realEstateAdSellService.saveOrUpdate(realEstateAd);
     }
 
 }

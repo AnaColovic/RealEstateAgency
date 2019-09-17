@@ -15,12 +15,14 @@ import javax.validation.constraints.NotNull;
  *
  * @author Administrator
  */
-public class RealEstateAdDTO implements Serializable{
+public class RealEstateAdDTO implements Serializable {
+
     private int id;
     private String description;
     private Date creationDate;
     @NotNull(message = "Real Estate can not be null")
-    private @Valid RealEstateDTO realEstate;
+    private @Valid
+    RealEstateDTO realEstate;
     private StatusRealEstateAd status;
 
     public RealEstateAdDTO() {
@@ -32,6 +34,10 @@ public class RealEstateAdDTO implements Serializable{
         this.creationDate = creationDate;
         this.realEstate = realEstate;
         this.status = status;
+    }
+
+    public RealEstateAdDTO(int id) {
+        this.id = id;
     }
 
     /**
@@ -103,7 +109,5 @@ public class RealEstateAdDTO implements Serializable{
     public void setStatus(StatusRealEstateAd status) {
         this.status = status;
     }
-    
-    
 
 }

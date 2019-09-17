@@ -6,6 +6,7 @@
 package com.realestate.service;
 
 import com.realestate.domain.City;
+import com.realestate.dto.CityDTO;
 import java.util.List;
 
 /**
@@ -13,5 +14,5 @@ import java.util.List;
  * @author Administrator
  */
 public interface CityService {
-    List<City> getAll();
+    List<CityDTO> getAll();
 }
